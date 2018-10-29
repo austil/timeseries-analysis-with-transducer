@@ -1,0 +1,18 @@
+{
+    "name": "peak",
+    "starting_state": "s",
+    "states": [
+        "s",
+        "r",
+        "t"
+    ],
+    "links": [
+        ["s", "s", ">=", "out"],
+        ["s", "r", "<", "out"],
+        ["r", "t", ">", "found"],
+        ["r", "r", "<=", "maybe(b)"],
+        ["t", "t", ">", "in"],
+        ["t", "t", "=", "maybe(a)"],
+        ["t", "r", "<", "out(a)"]
+    ]
+}

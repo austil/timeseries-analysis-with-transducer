@@ -1,0 +1,11 @@
+{
+    "name": "decreasing",
+    "starting_state": "s",
+    "states": [
+        "s"
+    ],
+    "links": [
+        ["s", "s", ">", "found_end"],
+        ["s", "s", "<=", "out"]
+    ]
+}
