@@ -1,0 +1,83 @@
+{
+  "functions": {
+    "feature": {
+      "one": {
+        "neutral": 1,
+        "min": 1,
+        "max": 1,
+        "phi": "fn.max",
+        "delta": "0"
+      },
+      "width": {
+        "neutral": 0,
+        "min": 0,
+        "max": "val.n",
+        "phi": "fn.plus",
+        "delta": "1"
+      },
+      "surface": {
+        "neutral": 0,
+        "min": "-infinity",
+        "max": "+infinity",
+        "phi": "fn.plus",
+        "delta": "val.xi"
+      },
+      "max": {
+        "neutral": "-infinity",
+        "min": "-infinity",
+        "max": "+infinity",
+        "phi": "fn.max",
+        "delta": "val.xi"
+      },
+      "min": {
+        "neutral": "+infinity",
+        "min": "-infinity",
+        "max": "+infinity",
+        "phi": "fn.min",
+        "delta": "val.xi"
+      },
+      "range": {
+        "neutral": 0,
+        "min": 0,
+        "max": "+infinity",
+        "phi": "fn.undefined",
+        "delta": "val.xi"
+      }
+    },
+    "aggregator": {
+      "max": { "default": "min(feature)" },
+      "min": { "default": "max(feature)" },
+      "sum": { "default": 0 }
+    }
+  },
+  "variables": {
+    "r": "default(aggregator, feature)",
+    "c": "default(aggregator, feature)",
+    "d": "neutral(feature)"
+  },
+  "result": "aggregator(r, c)",
+  "decoration": {
+    
+    "out_reset": ["d = neutral(feature)"],
+    "out_after": [
+      "r = aggregator(r, c)", 
+      "c = default(aggregator, feature)", 
+      "d = neutral(feature)"
+    ],
+    "maybe_before": ["d = phi(feature)(d, delta(feature))"],
+    "maybe_after": ["d = phi(feature)(d, delta(feature))"],
+    "found": [
+      "c = phi(feature)(d, delta(feature))",
+      "d = neutral(feature)"
+    ],
+    "found_end": [
+      "r = aggregator(r, phi(feature)(d, delta(feature)))",
+      "d = neutral(feature)"
+    ],
+    "in": [
+      "c = phi(feature)(c, phi(feature)(d, delta(feature)))",
+      "d = neutral(feature)"
+    ],
+    "out": []
+  }
+}
