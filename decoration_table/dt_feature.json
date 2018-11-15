@@ -1,67 +1,71 @@
 {
+  "params": {
+    "feature": ["one","width","surface","max","min","range"],
+    "aggregator": ["max","min","sum"]
+  },
   "functions": {
-    "feature": {
-      "one": {
-        "neutral": 1,
-        "min": 1,
-        "max": 1,
-        "phi": "fn.max",
-        "delta": "0"
-      },
-      "width": {
-        "neutral": 0,
-        "min": 0,
-        "max": "val.n",
-        "phi": "fn.plus",
-        "delta": "1"
-      },
-      "surface": {
-        "neutral": 0,
-        "min": "-infinity",
-        "max": "+infinity",
-        "phi": "fn.plus",
-        "delta": "val.xi"
-      },
-      "max": {
-        "neutral": "-infinity",
-        "min": "-infinity",
-        "max": "+infinity",
-        "phi": "fn.max",
-        "delta": "val.xi"
-      },
-      "min": {
-        "neutral": "+infinity",
-        "min": "-infinity",
-        "max": "+infinity",
-        "phi": "fn.min",
-        "delta": "val.xi"
-      },
-      "range": {
-        "neutral": 0,
-        "min": 0,
-        "max": "+infinity",
-        "phi": "fn.undefined",
-        "delta": "val.xi"
-      }
+    "neutral": {
+      "one": 1,
+      "width": 0,
+      "surface": 0,
+      "max": "-Infinity",
+      "min": "+Infinity",
+      "range": 0
     },
-    "aggregator": {
-      "max": { "default": "min(feature)" },
-      "min": { "default": "max(feature)" },
-      "sum": { "default": 0 }
+    "min": {
+      "one": 1,
+      "width": 0,
+      "surface": "-Infinity",
+      "max": "-Infinity",
+      "min": "-Infinity",
+      "range": 0
+    },
+    "max": {
+      "one": 1,
+      "width": "val.n",
+      "surface": "+Infinity",
+      "max": "+Infinity",
+      "min": "+Infinity",
+      "range": "+Infinity"
+    },
+    "phi": {
+      "one": "fn.max",
+      "width": "fn.plus",
+      "surface": "fn.plus",
+      "max": "fn.max",
+      "min": "fn.min"
+    },
+    "delta": {
+      "one": 0,
+      "width": 1,
+      "surface": "val.xi",
+      "max": "val.xi",
+      "min": "val.xi",
+      "range": "val.xi"
+    },
+    "aggreg": {
+      "max": "fn.max",
+      "min": "fn.min",
+      "sum": "fn.sum"
+    },
+    "default_": {
+      "max": "min",
+      "min": "max",
+      "sum": 0
     }
   },
   "variables": {
-    "r": "default(aggregator, feature)",
-    "c": "default(aggregator, feature)",
+    "r": "default_(aggregator)(feature)",
+    "c": "default_(aggregator)(feature)",
     "d": "neutral(feature)"
   },
-  "result": "aggregator(r, c)",
+  "result": "aggreg(aggregator)(r, c)",
   "decoration": {
     
     "out_reset": ["d = neutral(feature)"],
     "out_after": [
-      "r = aggregator(r, c)", 
-      "c = default(aggregator, feature)", 
+      "r = aggreg(aggregator)(r, c)", 
+      "c = default_(aggregator)(feature)", 
       "d = neutral(feature)"
     ],
     "maybe_before": ["d = phi(feature)(d, delta(feature))"],
@@ -71,7 +75,7 @@
       "d = neutral(feature)"
     ],
     "found_end": [
-      "r = aggregator(r, phi(feature)(d, delta(feature)))",
+      "r = aggreg(aggregator)(r, phi(feature)(d, delta(feature)))",
       "d = neutral(feature)"
     ],
     "in": [

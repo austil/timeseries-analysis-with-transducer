@@ -38,4 +38,8 @@ const run = c => {
 
 signature.forEach(run);
 
-console.log(JSON.stringify(seedTransducerResult));
+console.log(
+  JSON.stringify(
+    seedTransducerResult.map((v, i) => [v, timeserie[i]])
+  )
+);

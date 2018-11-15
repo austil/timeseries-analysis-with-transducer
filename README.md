@@ -9,4 +9,9 @@ node src/decoration_gen.js ../decoration_table/dt_footprint.json > runtime.js
 
 # 3. Run generated program on the seed transducer results
 node ./runtime.js ./st_result.json
+
+# -----------------------------------
+# For parameterized decoration tables
+node src/decoration_gen.js ../decoration_table/dt_feature.json > runtime.js
+node ./runtime.js ./st_result.json max max
 ```
