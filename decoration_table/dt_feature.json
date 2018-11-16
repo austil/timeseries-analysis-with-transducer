@@ -2,7 +2,7 @@
   "type": "decoration_table",
   "name": "feature",
   "params": {
-    "feature": ["one","width","surface","max","min","range"],
+    "feature": ["one","width","surface","max","min"],
     "aggregator": ["max","min","sum"]
   },
   "functions": {
@@ -11,29 +11,26 @@
       "width": 0,
       "surface": 0,
       "max": "-Infinity",
-      "min": "+Infinity",
-      "range": 0
+      "min": "+Infinity"
     },
     "min": {
       "one": 1,
       "width": 0,
       "surface": "-Infinity",
       "max": "-Infinity",
-      "min": "-Infinity",
-      "range": 0
+      "min": "-Infinity"
     },
     "max": {
       "one": 1,
       "width": "val.n",
       "surface": "+Infinity",
       "max": "+Infinity",
-      "min": "+Infinity",
-      "range": "+Infinity"
+      "min": "+Infinity"
     },
     "phi": {
       "one": "fn.max",
-      "width": "fn.plus",
-      "surface": "fn.plus",
+      "width": "fn.sum",
+      "surface": "fn.sum",
       "max": "fn.max",
       "min": "fn.min"
     },
@@ -42,8 +39,7 @@
       "width": 1,
       "surface": "val.xi",
       "max": "val.xi",
-      "min": "val.xi",
-      "range": "val.xi"
+      "min": "val.xi"
     },
     "aggreg": {
       "max": "fn.max",
@@ -53,7 +49,7 @@
     "default_": {
       "max": "min",
       "min": "max",
-      "sum": 0
+      "sum": "x => 0"
     }
   },
   "variables": {

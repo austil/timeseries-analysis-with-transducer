@@ -21,7 +21,7 @@ const ts = require(tsFile);
 
 // Sign and transduce
 const signature = sign(ts);
-const seedTransducer = ${JSON.stringify(seedTransducer)};
+const seedTransducer = ${JSON.stringify(seedTransducer, null, 2)};
 const transduced = transduce(seedTransducer, signature);
 const transduced_with_value = transduced.map((v, i) => [v, ts[i]]);
 

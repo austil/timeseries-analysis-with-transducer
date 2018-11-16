@@ -22,7 +22,7 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
     const fn = {
       min: Math.min,
       max: Math.max,
-      plus: (x, y) => x + y,
+      sum: (x, y) => x + y,
     };
   `);
 
@@ -39,8 +39,8 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
         ${getParam}
 
         if (${possibleValues}.includes(${name}) === false) {
-          console.log('Unsupported params for ${name} : ', ${name});
-          console.log('supported values are : ${possibleValues}')
+          console.log('Unsupported values for param "${name}" : ', ${name});
+          console.log('Supported values are : ${possibleValues}')
           process.exit(0);
         }`;
     }).join("\n");
@@ -66,7 +66,7 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
         switch(x) {
           ${valuesSwitch}
           default:
-            console.log(\`Unsupported param : \${x}\`);
+            throw \`Unsupported param for function ${fnName} : \${x}\`;
             process.exit(1);
         }
       };
@@ -136,11 +136,12 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
     val.n = seedTransducerResult.length + 1;
 
     seedTransducerResult.forEach(([token, xi], i) => {
+      // console.log(\`\${i} - \${xi} - \${token} : r = \${r}, c = \${c}, d = \${d}\`); // FOR DEBUG
       val.xi = xi;
       switch(token) {
         ${decorationCode}
         default:
-          console.log(\`Unsupported token : \${token}\`);
+          throw \`Unsupported token : \${token}\`;
           process.exit(1);
       }
 
@@ -150,8 +151,6 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
     // Result
     console.log(${decorationTable.result});
   `);
-
-  // console.log(`${i} - ${xi} - ${token} : r = ${r}, c = ${c}, d = ${d}`); // FOR DEBUG
 
   return code;
 }
