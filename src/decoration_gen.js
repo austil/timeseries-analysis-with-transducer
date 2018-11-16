@@ -1,103 +1,116 @@
-const decoratorFilePath = process.argv[2];
-const decorationTable = require(decoratorFilePath);
+const genDecorationCode = (decorationTable, transducedVarName) => {
 
-let code = "";
-const appendCode = str => {
-  code += str + "\n";
-};
+  // Code gen helpers
 
-appendCode(`
-const resultFilePath = process.argv[2];
-const seedTransducerResult = require(resultFilePath);
-`);
+  let code = "";
+  const appendCode = str => {
+    code += str + "\n";
+  };
 
-appendCode(`
-// Utils
+  // Values and function provided at runtime
 
-const val = { 
-  xi: null,
-  n: null
-};
+  appendCode(`
+    const seedTransducerResult = ${transducedVarName};
 
-const fn = { 
-  min: Math.min,
-  max: Math.max,
-  plus: (x, y) => x + y,
-};
+    // Utils
+
+    const val = { 
+      xi: null,
+      n: null
+    };
+
+    const fn = {
+      min: Math.min,
+      max: Math.max,
+      plus: (x, y) => x + y,
+    };
   `);
 
-if(decorationTable.params) {
-  appendCode("// Params");
+  // Decoration table params
 
-  const paramsSet = Object.entries(decorationTable.params).map(([name, values], i) => {
-    const getParam = `const ${name} = process.argv[${i + 3}];`
-    const possibleValues = JSON.stringify(values);
-    return `
-${getParam}
+  if (decorationTable.params) {
 
-if (${possibleValues}.includes(${name}) === false) {
-  console.log('Unsupported params for ${name} : ', ${name});
-  console.log('supported values are : ${possibleValues}')
-  process.exit(0);
-}`;
-  }).join("\n");
-  appendCode(paramsSet);
-  appendCode("");
-}
+    appendCode("// Params");
 
-if(decorationTable.functions) {
+    const paramsSet = Object.entries(decorationTable.params).map(([name, values], i) => {
+      const getParam = `const ${name} = process.argv[${i + 3}];`
+      const possibleValues = JSON.stringify(values);
+      return `
+        ${getParam}
 
-  appendCode("// Functions");
+        if (${possibleValues}.includes(${name}) === false) {
+          console.log('Unsupported params for ${name} : ', ${name});
+          console.log('supported values are : ${possibleValues}')
+          process.exit(0);
+        }`;
+    }).join("\n");
 
-  const functionSet = Object.entries(decorationTable.functions).map(([fnName, fnValues]) => {
-    const valuesSwitch = Object.entries(fnValues).map(([value, result]) => {
-      return `case "${value}":
-      return ${result};
-    `}).join("");
-
-    return `const ${fnName} = (x) => {
-  switch(x) {
-    ${valuesSwitch}
-    default:
-      console.log(\`Unsupported param : \${x}\`);
-      process.exit(1);
+    appendCode(paramsSet);
+    appendCode("");
   }
-};
-`;
-  }).join("\n");
 
-  appendCode(functionSet);
-  appendCode("");
-}
+  // Decoration table functions
 
-appendCode("// Init");
-Object.entries(decorationTable.variables).map(([k, v]) => {
-  appendCode(`let ${k} = ${v};`);
-});
+  if (decorationTable.functions) {
 
-appendCode(`
-// Run
+    appendCode("// Functions");
 
-let waitingDecorations = [];
+    const functionSet = Object.entries(decorationTable.functions).map(([fnName, fnValues]) => {
+      const valuesSwitch = Object.entries(fnValues).map(([value, result]) => {
+        return `
+          case "${value}":
+            return ${result};
+        `}).join("");
 
-const retry = () => {
-  const failedDecorations = [];
+      return `const ${fnName} = (x) => {
+        switch(x) {
+          ${valuesSwitch}
+          default:
+            console.log(\`Unsupported param : \${x}\`);
+            process.exit(1);
+        }
+      };
+      `;
+    }).join("\n");
 
-  waitingDecorations.forEach(([compute, set]) => {
-    if (compute() !== undefined) {
-      set(compute());
-    } else {
-      failedDecorations.push([compute, set]);
-    }
+    appendCode(functionSet);
+    appendCode("");
+  }
+
+  // Registers init
+
+  appendCode("// Init");
+  Object.entries(decorationTable.variables).map(([k, v]) => {
+    appendCode(`let ${k} = ${v};`);
   });
 
-  waitingDecorations = failedDecorations;
-};
-`);
+  // "Forward dependencies" handling
 
-const instructionCode = (instruction, index) => {
-  const [setStr, computeStr] = instruction.split("=").map(s => s.trim());
-  return `
+  appendCode(`
+    // Run
+
+    let waitingDecorations = [];
+
+    const retry = () => {
+      const failedDecorations = [];
+
+      waitingDecorations.forEach(([compute, set]) => {
+        if (compute() !== undefined) {
+          set(compute());
+        } else {
+          failedDecorations.push([compute, set]);
+        }
+      });
+
+      waitingDecorations = failedDecorations;
+    };
+  `);
+
+  // Runtime (token switch)
+
+  const instructionCode = (instruction, index) => {
+    const [setStr, computeStr] = instruction.split("=").map(s => s.trim());
+    return `
       const compute${index} = () => ${computeStr};
       const set${index} = value => ${setStr} = value;
 
@@ -106,37 +119,43 @@ const instructionCode = (instruction, index) => {
       } else {
         waitingDecorations.push([compute${index}, set${index}]);
       }
-  `;
+    `;
+  };
+
+  const decorationCode = Object.entries(decorationTable.decoration)
+    .map(([token, instructions]) => `
+      case '${token}': {
+        ${instructions.map(instructionCode).join('\n')}
+        break;
+      }
+    `).join('\n');
+
+  // Runtime (for loop)
+
+  appendCode(`
+    val.n = seedTransducerResult.length + 1;
+
+    seedTransducerResult.forEach(([token, xi], i) => {
+      val.xi = xi;
+      switch(token) {
+        ${decorationCode}
+        default:
+          console.log(\`Unsupported token : \${token}\`);
+          process.exit(1);
+      }
+
+      retry();
+    });
+
+    // Result
+    console.log(${decorationTable.result});
+  `);
+
+  // console.log(`${i} - ${xi} - ${token} : r = ${r}, c = ${c}, d = ${d}`); // FOR DEBUG
+
+  return code;
+}
+
+module.exports = {
+  genDecorationCode
 };
-
-const decorationCode = Object.entries(decorationTable.decoration)
-  .map(([token, instructions]) => `
-    case '${token}': {
-      ${instructions.map(instructionCode).join('\n')}
-      break;
-    }
-  `).join('\n');
-
-appendCode(`
-val.n = seedTransducerResult.length + 1;
-
-seedTransducerResult.forEach(([token, xi], i) => {
-  val.xi = xi;
-  switch(token) {
-    ${decorationCode}
-    default:
-      console.log(\`Unsupported token : \${token}\`);
-      process.exit(1);
-  }
-
-  retry();
-});
-
-// Result
-console.log(${decorationTable.result});
-
-`);
-
-// console.log(`${i} - ${xi} - ${token} : r = ${r}, c = ${c}, d = ${d}`); // FOR DEBUG
-
-console.log(code);
