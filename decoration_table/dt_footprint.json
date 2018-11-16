@@ -1,4 +1,6 @@
 {
+  "type": "decoration_table",
+  "name": "footprint",
   "variables": {
     "counter": "0",
     "footprint": "[]"

@@ -1,4 +1,6 @@
 {
+  "type": "decoration_table",
+  "name": "feature",
   "params": {
     "feature": ["one","width","surface","max","min","range"],
     "aggregator": ["max","min","sum"]

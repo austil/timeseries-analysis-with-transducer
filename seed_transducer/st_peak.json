@@ -1,4 +1,5 @@
 {
+    "type": "seed_transducer",
     "name": "peak",
     "starting_state": "s",
     "states": [
