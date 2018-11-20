@@ -55,9 +55,9 @@ runTest("inflexion", "feature_after_1", [0,1,2,3,2,0,0], "surface max", 6);
 
 // INFLEXION - FOOTPRINT
 genTest("inflexion", "footprint");
-// runTest("inflexion", "footprint",
-//   [0,1,2,3,2,0], "",
-//    [0,1,1,1,0] // On devrait avoir ça : [ 0, 1, 1, 1 ]
-// );
+runTest("inflexion", "footprint",
+  [0,1,2,3,2,0], "",
+   [0,1,1,1,0]
+);
 
 console.log('Tests success !');

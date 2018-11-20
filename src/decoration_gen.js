@@ -110,7 +110,7 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
   // Runtime (token switch)
 
   const instructionCode = (instruction, index) => {
-    const [setStr, computeStr] = instruction.split("=").map(s => s.trim());
+    const [setStr, computeStr] = instruction.split(" = ").map(s => s.trim());
     return `
       const compute${index} = () => ${computeStr};
       const set${index} = value => ${setStr} = value;
