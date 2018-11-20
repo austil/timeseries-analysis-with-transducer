@@ -29,7 +29,8 @@ const bench = require('benchmark');
 test_utils.genTest("peak", "footprint");
 console.log("Code generated with success");
 
-const tsSizes = [10, 100, 1000, 10000, 100000, 500000, 1000000, 1500000, 2000000];
+const tsSizes = [10, 100, 1000, 10000, 100000, 1000000, 2000000, 5000000, 10000000, 20000000];
+const output = [];
 
 tsSizes.forEach(tsSize => {
   // Create data file
@@ -46,14 +47,25 @@ tsSizes.forEach(tsSize => {
     minSamples: 3,
     initCount: 1,
     onComplete : function(){
-      console.log('\nRESULTS, tsSize : ' + tsSize + '\n--------------');
+      /*console.log('\nRESULTS, tsSize : ' + tsSize + '\n--------------');
       console.log('moyenne arithmétique;' + this.stats.mean.toFixed(4) + ";sec");
       console.log('margin of error;' + this.stats.moe.toFixed(4) + ";sec");
       console.log('relative margin of error;' + this.stats.rme.toFixed(4) + ";%");
       console.log('deviation/ecart type ~;' + this.stats.deviation.toFixed(4) + ";sec");
       console.log('sample size;' + this.stats.sample.length + ";");
-      console.log('benchmark duration;' + this.times.elapsed + ";sec");
+      console.log('benchmark duration;' + this.times.elapsed + ";sec");*/
+      output.push(
+        tsSize + "," +
+        this.stats.mean.toFixed(4) + "," +
+        this.stats.moe.toFixed(4) + "," +
+        this.stats.rme.toFixed(4) + "," +
+        this.stats.deviation.toFixed(4) + "," +
+        this.stats.sample.length + "," +
+        this.times.elapsed
+      );
     },
   }).run();
-})
+});
 
+console.log("\n--------------\n");
+output.forEach( x => console.log(x));
