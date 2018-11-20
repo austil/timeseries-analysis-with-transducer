@@ -14,17 +14,27 @@ const genTest = (st, dt) => {
   assert.equal(genResult, `Decoracted transducer generated in : ./dist/${dt}_${st}.js`);
 }
 
-const runTest = (st, dt, ts, params, expected) => {
-  const file = `/ts_test_${dt}_${st}.json`;
+const createTestData = (st, dt, ts) => {
+  const file = `/ts_test_${dt}_${st}_${ts.length}.json`;
   fs.writeFileSync(dir + file, JSON.stringify(ts), 'utf8');
+};
 
+const testProcess = (st, dt, params, tsSize) => {
+  const file = `/ts_test_${dt}_${st}_${tsSize}.json`;
   const cmd = `node ./dist/${dt}_${st}.js ../test/data${file} ${params}`;
   const runResult = child_process.execSync(cmd, {cwd: './', encoding: 'utf8'}).trim();
-  
+  return runResult;
+}
+
+const runTest = (st, dt, ts, params, expected) => {
+  createTestData(st, dt, ts);
+  const runResult = testProcess(st, dt, params, ts.length);
   assert.deepEqual(JSON.parse(runResult), expected);
 }
 
 module.exports = {
   genTest,
-  runTest
+  runTest,
+  createTestData,
+  testProcess
 }

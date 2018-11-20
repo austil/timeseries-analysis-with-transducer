@@ -15,7 +15,6 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
     // Utils
 
     const val = { 
-      xi: null,
       n: null
     };
 
@@ -23,6 +22,7 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
       min: Math.min,
       max: Math.max,
       sum: (x, y) => x + y,
+      x: i => seedTransducerResult[i][1]
     };
   `);
 
@@ -89,6 +89,7 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
   appendCode(`
     // Run
 
+    // List of computation to retry, the head is the last added to the list
     let waitingDecorations = [];
 
     const retry = () => {
@@ -98,7 +99,7 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
         if (compute() !== undefined) {
           set(compute());
         } else {
-          failedDecorations.push([compute, set]);
+          failedDecorations.push([compute, set]); // Keep the order
         }
       });
 
@@ -117,7 +118,7 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
       if (compute${index}() !== undefined) {
         set${index}(compute${index}());
       } else {
-        waitingDecorations.push([compute${index}, set${index}]);
+        waitingDecorations.unshift([compute${index}, set${index}]); // Add at the beginning
       }
     `;
   };
@@ -136,8 +137,7 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
     val.n = seedTransducerResult.length + 1;
 
     seedTransducerResult.forEach(([token, xi], i) => {
-      // console.log(\`\${i} - \${xi} - \${token} : r = \${r}, c = \${c}, d = \${d}\`); // FOR DEBUG
-      val.xi = xi;
+      // console.log(\`\${i} - \${xi} - \${token}\`); // FOR DEBUG
       switch(token) {
         ${decorationCode}
         default:

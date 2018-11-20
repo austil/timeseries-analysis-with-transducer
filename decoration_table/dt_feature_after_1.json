@@ -1,6 +1,6 @@
 {
   "type": "decoration_table",
-  "name": "feature",
+  "name": "feature_after_1",
   "params": {
     "feature": ["one","width","surface","max","min"],
     "aggregator": ["max","min","sum"]
@@ -35,11 +35,11 @@
       "min": "fn.min"
     },
     "delta": {
-      "one": 0,
-      "width": 1,
-      "surface": "val.xi",
-      "max": "val.xi",
-      "min": "val.xi"
+      "one": "i => 0",
+      "width": "i => 1",
+      "surface": "fn.x",
+      "max": "fn.x",
+      "min": "fn.x"
     },
     "aggreg": {
       "max": "fn.max",
@@ -66,18 +66,18 @@
       "c = default_(aggregator)(feature)", 
       "d = neutral(feature)"
     ],
-    "maybe_before": ["d = phi(feature)(d, delta(feature))"],
-    "maybe_after": ["d = phi(feature)(d, delta(feature))"],
+    "maybe_before": ["d = phi(feature)(d, delta(feature)(i))"],
+    "maybe_after": ["d = phi(feature)(d, delta(feature)(i))"],
     "found": [
-      "c = phi(feature)(d, delta(feature))",
+      "c = phi(feature)(d, delta(feature)(i))",
       "d = neutral(feature)"
     ],
     "found_end": [
-      "r = aggreg(aggregator)(r, phi(feature)(d, delta(feature)))",
+      "r = aggreg(aggregator)(r, phi(feature)(d, delta(feature)(i)))",
       "d = neutral(feature)"
     ],
     "in": [
-      "c = phi(feature)(c, phi(feature)(d, delta(feature)))",
+      "c = phi(feature)(c, phi(feature)(d, delta(feature)(i)))",
       "d = neutral(feature)"
     ],
     "out": []

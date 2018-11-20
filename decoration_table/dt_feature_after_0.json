@@ -1,0 +1,85 @@
+{
+  "type": "decoration_table",
+  "name": "feature_after_0",
+  "params": {
+    "feature": ["one","width","surface","max","min"],
+    "aggregator": ["max","min","sum"]
+  },
+  "functions": {
+    "neutral": {
+      "one": 1,
+      "width": 0,
+      "surface": 0,
+      "max": "-Infinity",
+      "min": "+Infinity"
+    },
+    "min": {
+      "one": 1,
+      "width": 0,
+      "surface": "-Infinity",
+      "max": "-Infinity",
+      "min": "-Infinity"
+    },
+    "max": {
+      "one": 1,
+      "width": "val.n",
+      "surface": "+Infinity",
+      "max": "+Infinity",
+      "min": "+Infinity"
+    },
+    "phi": {
+      "one": "fn.max",
+      "width": "fn.sum",
+      "surface": "fn.sum",
+      "max": "fn.max",
+      "min": "fn.min"
+    },
+    "delta": {
+      "one": "i => 0",
+      "width": "i => 1",
+      "surface": "fn.x",
+      "max": "fn.x",
+      "min": "fn.x"
+    },
+    "aggreg": {
+      "max": "fn.max",
+      "min": "fn.min",
+      "sum": "fn.sum"
+    },
+    "default_": {
+      "max": "min",
+      "min": "max",
+      "sum": "x => 0"
+    }
+  },
+  "variables": {
+    "r": "default_(aggregator)(feature)",
+    "c": "default_(aggregator)(feature)",
+    "d": "neutral(feature)"
+  },
+  "result": "aggreg(aggregator)(r, c)",
+  "decoration": {
+    
+    "out_reset": ["d = neutral(feature)"],
+    "out_after": [
+      "r = aggreg(aggregator)(r, c)", 
+      "c = default_(aggregator)(feature)", 
+      "d = neutral(feature)"
+    ],
+    "maybe_before": ["d = phi(feature)(d, delta(feature)(i))"],
+    "maybe_after": ["d = phi(feature)(d, delta(feature)(i+1))"],
+    "found": [
+      "c = phi(feature)(phi(feature)(d, delta(feature)(i)), delta(feature)(i+1))",
+      "d = neutral(feature)"
+    ],
+    "found_end": [
+      "r = aggreg(aggregator)(r, phi(feature)(phi(feature)(d, delta(feature)(i)), delta(feature)(i+1)))",
+      "d = neutral(feature)"
+    ],
+    "in": [
+      "c = phi(feature)(c, phi(feature)(d, delta(feature)(i+1)))",
+      "d = neutral(feature)"
+    ],
+    "out": []
+  }
+}
