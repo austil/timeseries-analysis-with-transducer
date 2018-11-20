@@ -1,0 +1,24 @@
+{
+  "type": "seed_transducer",
+  "name": "summit",
+  "starting_state": "s",
+  "states": [
+      "s",
+      "r",
+      "t",
+      "u"
+  ],
+  "links": [
+      ["s", "s", ">=", "out"],
+      ["s", "r", "<", "out"],
+      ["r", "r", "<", "maybe_before"],
+      ["r", "t", ">", "found"],
+      ["r", "u", "=", "maybe_before"],
+      ["t", "t", "=", "maybe_after"],
+      ["t", "t", ">", "in"],
+      ["t", "r", "<", "out_after"],
+      ["u", "u", "=", "maybe_before"],
+      ["u", "r", "<", "maybe_before"],
+      ["u", "s", ">", "out_reset"]
+  ]
+}

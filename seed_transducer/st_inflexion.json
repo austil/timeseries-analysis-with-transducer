@@ -1,0 +1,19 @@
+{
+  "type": "seed_transducer",
+  "name": "inflexion",
+  "starting_state": "s",
+  "states": [
+      "s",
+      "r",
+      "t"
+  ],
+  "links": [
+      ["s", "s", "=", "out"],
+      ["s", "t", ">", "out"],
+      ["s", "r", "<", "out"],
+      ["r", "t", ">", "found_end"],
+      ["r", "r", "<=", "maybe_before"],
+      ["t", "t", ">=", "maybe_before"],
+      ["t", "r", "<", "found_end"]
+  ]
+}

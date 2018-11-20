@@ -1,0 +1,20 @@
+{
+  "type": "seed_transducer",
+  "name": "proper_plateau",
+  "starting_state": "s",
+  "states": [
+      "s",
+      "r",
+      "t"
+  ],
+  "links": [
+      ["s", "s", ">=", "out"],
+      ["s", "r", "<", "out"],
+      ["r", "r", "<", "out"],
+      ["r", "t", "=", "maybe_before"],
+      ["r", "s", ">", "out"],
+      ["t", "t", "=", "maybe_before"],
+      ["t", "r", "<", "out_reset"],
+      ["t", "s", ">", "found_end"]
+  ]
+}
