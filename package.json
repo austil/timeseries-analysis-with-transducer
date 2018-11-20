@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node test/test_feature.js"
+    "test": "node test/test_all.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "benchmark": "^2.1.4"
+  }
 }

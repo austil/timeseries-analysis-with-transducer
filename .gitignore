@@ -2,3 +2,4 @@ runtime.js
 st_result.json
 dist
 test/data
+node_modules/
