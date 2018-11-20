@@ -55,9 +55,22 @@ runTest("inflexion", "feature_after_1", [0,1,2,3,2,0,0], "surface max", 6);
 
 // INFLEXION - FOOTPRINT
 genTest("inflexion", "footprint");
-// runTest("inflexion", "footprint",
-//   [0,1,2,3,2,0], "",
-//    [0,1,1,1,0] // On devrait avoir ça : [ 0, 1, 1, 1 ]
-// );
+runTest("inflexion", "footprint",
+  [0,1,2,3,2,0], "",
+   [0,1,1,1,0]
+);
+
+// DESCREASING - FEATURE
+genTest("decreasing", "feature_after_0");
+runTest("decreasing", "feature_after_0", [3,4,4,3,2,2,1], "width max", 2);
+runTest("decreasing", "feature_after_0", [3,4,2,2,5,6,6,4,4,3,1,1,4,6,4,4], "surface max", 10);
+runTest("decreasing", "feature_after_0", [3,4,2,2,5,6,6,4,4,3,1,1,4,6,4,4], "min min", 1);
+
+// DESCREASING - FOOTPRINT
+genTest("decreasing", "footprint");
+runTest("decreasing", "footprint",
+  [1,3,2,1,1], "",
+   [0,1,2,0]
+);
 
 console.log('Tests success !');

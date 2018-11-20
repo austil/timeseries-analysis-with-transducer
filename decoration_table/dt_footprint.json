@@ -10,8 +10,8 @@
     "out": ["footprint[i] = 0"],
     "out_reset": ["footprint[i] = 0"],
     "out_after": ["footprint[i] = 0"],
-    "maybe_before": ["footprint[i] = footprint[i + 1]"],
-    "maybe_after": ["footprint[i] = footprint[i + 1]"],
+    "maybe_before": ["footprint[i] = (i === val.n - 2 ? 0 : footprint[i + 1])"],
+    "maybe_after": ["footprint[i] = (i === val.n - 2 ? 0 : footprint[i + 1])"],
     "found_end": ["footprint[i] = counter + 1", "counter = counter + 1"],
     "found": ["footprint[i] = counter + 1", "counter = counter + 1"],
     "in": ["footprint[i] = counter"]
