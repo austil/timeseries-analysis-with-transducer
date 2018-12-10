@@ -1,6 +1,13 @@
 const {genTest, runTest} = require("./test_utils");
 
 // PEAK - FEATURE
+genTest("peak", "feature_after_1");
+runTest("peak", "feature_after_1",
+  [7,5,5,1,4,5,2,2,3,5,6,2,3,3,3,1], "max",
+   [0,0,0,0,0,5,0,0,0,0,6,0,0,0,3]
+);
+
+// PEAK - FEATURE AGGR
 genTest("peak", "feature_aggr_after_1");
 runTest("peak", "feature_aggr_after_1", [0,3,5,6,2,0,0], "width max", 4);
 runTest("peak", "feature_aggr_after_1", [7,5,5,1,4,5,2,2,3,5,6,2,3,3,3,1], "width max", 3);
@@ -15,7 +22,7 @@ runTest("peak", "footprint",
    [0,1,1,1,0,0]
 );
 
-// SUMMIT - FEATURE
+// SUMMIT - FEATURE AGGR
 genTest("summit", "feature_aggr_after_1");
 runTest("summit", "feature_aggr_after_1", [0,1,1,2,1,1,0], "width max", 5);
 runTest("summit", "feature_aggr_after_1", [0,1,1,2,1,1,0], "max max", 2);
@@ -30,7 +37,7 @@ runTest("summit", "footprint",
    [0,1,1,1,0,2,2,2]
 );
 
-// PROPER PLATEAU - FEATURE
+// PROPER PLATEAU - FEATURE AGGR
 genTest("proper_plateau", "feature_aggr_after_1");
 runTest("proper_plateau", "feature_aggr_after_1", [0,1,1,1,0,0,0], "width max", 3);
 runTest("proper_plateau", "feature_aggr_after_1", [0,1,1,1,0,0,0], "max max", 1);
@@ -44,7 +51,7 @@ runTest("proper_plateau", "footprint",
    [0,1,1,1,0,2,2,2]
 );
 
-// INFLEXION - FEATURE
+// INFLEXION - FEATURE AGGR
 genTest("inflexion", "feature_aggr_after_1");
 runTest("inflexion", "feature_aggr_after_1", [1,2,6,6,4,4,3,5,2,5,1,5,3,3,4,4], "width max", 3);
 runTest("inflexion", "feature_aggr_after_1", [0,1,2,3,2,0,0], "width max", 3);
@@ -60,7 +67,7 @@ runTest("inflexion", "footprint",
    [0,1,1,1,0]
 );
 
-// DESCREASING - FEATURE
+// DESCREASING - FEATURE AGGR
 genTest("decreasing", "feature_aggr_after_0");
 runTest("decreasing", "feature_aggr_after_0", [3,4,4,3,2,2,1], "width max", 2);
 runTest("decreasing", "feature_aggr_after_0", [3,4,2,2,5,6,6,4,4,3,1,1,4,6,4,4], "surface max", 10);

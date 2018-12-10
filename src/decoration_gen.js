@@ -148,6 +148,10 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
       retry();
     });
 
+    if(waitingDecorations.length > 0) {
+      throw \`Failed : some decoration are still waiting\`;
+    }
+
     // Result
     console.log(${decorationTable.result});
   `);

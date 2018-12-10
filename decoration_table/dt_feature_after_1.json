@@ -1,0 +1,88 @@
+{
+  "type": "decoration_table",
+  "name": "feature_after_1",
+  "params": {
+    "feature": ["one","width","surface","max","min"]
+  },
+  "functions": {
+    "default_": {
+      "one": 0,
+      "width": 0,
+      "surface": 0,
+      "max": 0,
+      "min": 0
+    },
+    "id": {
+      "one": 0,
+      "width": 0,
+      "surface": 0,
+      "max": "-Infinity",
+      "min": "+Infinity"
+    },
+    "phi": {
+      "one": "fn.max",
+      "width": "fn.sum",
+      "surface": "fn.sum",
+      "max": "fn.max",
+      "min": "fn.min"
+    },
+    "delta": {
+      "one": "i => 1",
+      "width": "i => 1",
+      "surface": "fn.x",
+      "max": "fn.x",
+      "min": "fn.x"
+    }
+  },
+  "variables": {
+    "c": "id(feature)",
+    "d": "id(feature)",
+    "e": "[]",
+    "f": "[]"
+  },
+  "result": "f",
+  "decoration": {
+    "out": [
+      "f[i] = default_(feature)",
+      "e[i] = default_(feature)"
+    ],
+    "out_reset": [
+      "f[i] = default_(feature)",
+      "e[i] = default_(feature)",
+      "d = id(feature)"
+    ],
+    "out_after": [
+      "f[i] = default_(feature)",
+      "e[i] = c",
+      "c = default_(feature)",
+      "d = id(feature)"
+    ],
+    "maybe_before": [
+      "f[i] = default_(feature)",
+      "e[i] = (i === val.n - 2 ? c : e[i+1])",
+      "d = phi(feature)(d, delta(feature)(i))"
+    ],
+    "maybe_after": [
+      "f[i] = default_(feature)",
+      "e[i] = (i === val.n - 2 ? c : e[i+1])",
+      "d = phi(feature)(d, delta(feature)(i))"
+    ],
+    "found": [
+      "c = phi(feature)(d, delta(feature)(i))",
+      "f[i] = e[i]",
+      "e[i] = (i === val.n - 2 ? c : e[i+1])",
+      "d = id(feature)"
+    ],
+    "in": [
+      "f[i] = default_(feature)",
+      "e[i] = (i === val.n - 2 ? c : e[i+1])",
+      "c = phi(feature)(c, phi(feature)(d, delta(feature)(i)))",
+      "d = id(feature)"
+    ],
+    "found_end": [
+      "f[i] = phi(feature)(d, delta(feature)(i))",
+      "e[i] = default_(feature)",
+      "d = id(feature)"
+    ]
+  }
+}
