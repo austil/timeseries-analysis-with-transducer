@@ -1,6 +1,6 @@
 {
   "type": "decoration_table",
-  "name": "feature_after_0",
+  "name": "feature_aggr_after_0",
   "params": {
     "feature": ["one","width","surface","max","min"],
     "aggregator": ["max","min","sum"]
