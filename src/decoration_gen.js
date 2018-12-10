@@ -131,6 +131,11 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
       }
     `).join('\n');
 
+  const finishCode = decorationTable.result
+    .map(instruction => `
+      ${instruction};
+    `).join('\n');
+
   // Runtime (for loop)
 
   appendCode(`
@@ -148,12 +153,15 @@ const genDecorationCode = (decorationTable, transducedVarName) => {
       retry();
     });
 
+    ${finishCode}
+    retry();
+
     if(waitingDecorations.length > 0) {
       throw \`Failed : some decoration are still waiting\`;
     }
 
     // Result
-    console.log(${decorationTable.result});
+    console.log(${decorationTable.result[decorationTable.result.length - 1]});
   `);
 
   return code;

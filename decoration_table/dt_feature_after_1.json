@@ -40,7 +40,11 @@
     "e": "[]",
     "f": "[]"
   },
-  "result": "f",
+  "result": [
+    "f[val.n - 1] = default_(feature)",
+    "e[val.n - 1] = c",
+    "f"
+  ],
   "decoration": {
     "out": [
       "f[i] = default_(feature)",
@@ -59,23 +63,23 @@
     ],
     "maybe_before": [
       "f[i] = default_(feature)",
-      "e[i] = (i === val.n - 2 ? c : e[i+1])",
+      "e[i] = e[i+1]",
       "d = phi(feature)(d, delta(feature)(i))"
     ],
     "maybe_after": [
       "f[i] = default_(feature)",
-      "e[i] = (i === val.n - 2 ? c : e[i+1])",
+      "e[i] = e[i+1]",
       "d = phi(feature)(d, delta(feature)(i))"
     ],
     "found": [
       "c = phi(feature)(d, delta(feature)(i))",
       "f[i] = e[i]",
-      "e[i] = (i === val.n - 2 ? c : e[i+1])",
+      "e[i] = e[i+1]",
       "d = id(feature)"
     ],
     "in": [
       "f[i] = default_(feature)",
-      "e[i] = (i === val.n - 2 ? c : e[i+1])",
+      "e[i] = e[i+1]",
       "c = phi(feature)(c, phi(feature)(d, delta(feature)(i)))",
       "d = id(feature)"
     ],

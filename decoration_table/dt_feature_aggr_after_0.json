@@ -57,7 +57,7 @@
     "c": "default_(aggregator)(feature)",
     "d": "neutral(feature)"
   },
-  "result": "aggreg(aggregator)(r, c)",
+  "result": ["aggreg(aggregator)(r, c)"],
   "decoration": {
     
     "out_reset": ["d = neutral(feature)"],
